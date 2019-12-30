@@ -3,7 +3,7 @@ import glob
 import numpy as np
 import matplotlib.pyplot as plt
 from numpy.fft import fft
-
+from scipy import signal
 
 
 
@@ -19,8 +19,8 @@ def main():
         print(fs)
         print(data)
 
-        plt.plot(data)
-        plt.show()
+        # plt.plot(data)
+        # plt.show()
 
         signal1 = fft(data)
         signal1 = abs(signal1) / len(data) * 2 
@@ -31,17 +31,23 @@ def main():
         plt.plot(freqs[:10000], signal1[:10000])
         plt.xlabel("Częstotliwość")
         plt.ylabel("Amplituda")
-        plt.show()
-
+        #plt.show()
 
         ################
-        data = signal1[:10000]
-        window_array = np.kaiser(len(data), 200)
-        signal_kaiser = data * window_array
+        N = 10000
+        data = signal1[:N]
+        freqs = freqs[:N]
+        window_array = np.kaiser(len(data), 500)
+        signal_kaiser = np.convolve(data, window_array, mode='same') / sum(window_array)
 
-
-        plt.plot(signal_kaiser)
+        plt.plot(freqs, signal_kaiser)
         plt.show()
+
+        maxIndex = np.argmax(signal_kaiser)
+
+        print(len(signal1))
+        print(len(freqs))
+        print(f"Max amplitude at: {freqs[maxIndex]}")
 
         break
 
