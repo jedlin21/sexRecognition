@@ -5,7 +5,7 @@ import glob
 
 
 def main():
-    regex = "trainall/*.wav"
+    regex = "train/*.wav"
     files = glob.glob(f"./{regex}", recursive=True)
     for f in files:
         print(f)
