@@ -13,14 +13,17 @@ def main():
     for f in files:
         print(f)
         fs, data = wavfile.read(f)
+        print(f"shape {data.shape}")
+        if len(data.shape) != 1:
+            data = data[:, 0]
         print(len(data))
         data = data[ int(len(data)*0.1) : int(len(data)*0.9) ] #cut ends of the signal to avoid interference
         print(len(data))
         print(fs)
         print(data)
 
-        # plt.plot(data)
-        # plt.show()
+        plt.plot(data)
+        plt.show()
 
         signal1 = fft(data)
         signal1 = abs(signal1) / len(data) * 2 
@@ -49,7 +52,7 @@ def main():
         print(len(freqs))
         print(f"Max amplitude at: {freqs[maxIndex]}")
 
-        break
+        
 
 
 main()
