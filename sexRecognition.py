@@ -17,8 +17,12 @@ def main():
             data = data[:, 0]
         data = data[int(len(data) * 0.1): int(len(data) * 0.9)]  # cut ends of the signal to avoid interference
 
+        # keiser
+        window_array = np.kaiser(len(data), 500)
+        signal_kaiser = window_array * data
+
         # FFT
-        signal1 = fft(data)
+        signal1 = fft(signal_kaiser)
         signal1 = abs(signal1) / len(data) * 2
         signal1[0] = 0
 
@@ -29,12 +33,11 @@ def main():
         data = signal1[:N]
         freqs = freqs[:N]
 
-        # keiser
-        window_array = np.kaiser(len(data), 500)
-        signal_kaiser = window_array * data
+        plt.plot(freqs, data)
+        plt.show()
 
         # signal.decimate
-        kopia_fft = signal_kaiser.copy()
+        kopia_fft = data.copy()
         for k in range(2, 6):
             d = signal.decimate(data, int(k))
             kopia_fft[:len(d)] *= d
